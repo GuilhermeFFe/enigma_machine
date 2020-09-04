@@ -2,6 +2,7 @@ from random import randint
 
 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
+end_rotor_wiring = (25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 rotor_wiring = (
     (15, 4, 25, 20, 14, 7, 23, 18, 2, 21, 5, 12, 19, 1, 6, 11, 17, 8, 13, 16, 9, 22, 0, 24, 3, 10),
     (25, 14, 20, 4, 18, 24, 3, 10, 5, 22, 15, 2, 8, 16, 23, 7, 12, 21, 1, 11, 6, 13, 9, 17, 0, 19),
@@ -16,7 +17,13 @@ class Rotors:
             self._next = None
             self._prev = None
             self._val = start
+            self._idx = index
             self._wiring = rotor_wiring[index]
+            self._is_end = None
+        
+        def set_end_wiring(self):
+            self._is_end = True
+            self._wiring = end_rotor_wiring
         
         def next(self, next: 'Rotor') -> None:
             self._next = next
@@ -25,17 +32,19 @@ class Rotors:
             self._prev = prev
         
         def pass_through(self, c: int) -> int:
-            c_in = (c + self._val) % 26
+            if self._is_end:
+                c_in = c
+            else:
+                c_in = (c + self._val) % 26
             new_c = self._wiring[c_in]
 
             if self._next:
                 return self._next.pass_through(new_c)
             else:
-                return self.pass_through_rev(new_c)
+                return self._prev.pass_through_rev(new_c)
         
         def pass_through_rev(self, c: int) -> int:
-            c_in = (c + self._val) % 26
-            new_c = ((self._wiring.index(c_in) - self._val) + 26) % 26
+            new_c = (self._wiring.index(c) - self._val + 26) % 26
 
             if self._prev:
                 return self._prev.pass_through_rev(new_c)
@@ -43,7 +52,6 @@ class Rotors:
                 return new_c
         
         def increment(self) -> None:
-            print( f'rotor(val={self._val}')
             self._val += 1
             if self._val >= 26:
                 self._val = 0
@@ -55,6 +63,7 @@ class Rotors:
         self._first = self._rotors[0]
         for _ in range(1, size):
             self._append_rotor()
+        self._rotors[-1].set_end_wiring( )
     
     def _append_rotor(self) -> None:
         new_rotor = self.Rotor(len(self._rotors), 0)
@@ -73,11 +82,6 @@ class Rotors:
         return alphabet[c]
     
     def pass_through(self, c: str) -> str:
-        if len(c) != 1:
-            raise Exception('Rotors can receive single-characters only.')
-        if not c.isalpha():
-            raise Exception('Rotors can receive alphabetic characters only.')
-
         c = c.upper()
         new_c = self._first.pass_through(self.char_to_number(c))
         self._first.increment()
