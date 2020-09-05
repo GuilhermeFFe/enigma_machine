@@ -4,8 +4,8 @@ from .plug_board import PlugBoard
 alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
 class Machine:
-    def __init__(self):
-        self._rotors = Rotors()
+    def __init__(self, num_rotors: int=5):
+        self._rotors = Rotors(num_rotors)
         self._plug_board = PlugBoard()
 
     def type(self, c: str) -> str:
@@ -31,9 +31,17 @@ class Machine:
     def add_plug(self, a: str, b: str) -> None:
         if len(a) != 1 or len(b) != 1:
             raise Exception('Plugs can only be added with chars')
+        if not a.isalpha() or not b.isalpha():
+            raise Exception('Plugs can only connect alphabetic chars')
         a = self.char_to_number(a)
         b = self.char_to_number(b)
         self._plug_board.add_plug(a, b)
     
-    def increment_rotors(self, by: int) -> None:
+    def increment_rotor(self, by: int) -> None:
         self._rotors.increment_rotor(by)
+    
+    def type_word(self, word: str) -> str:
+        encrypted = ''
+        for c in word:
+            encrypted += self.type(c)
+        return encrypted

@@ -56,7 +56,7 @@ class Rotors:
                 if self._next:
                     self._next.increment()
 
-    def __init__(self, size: int=5):
+    def __init__(self, size):
         self._rotors = [self.Rotor(0, 0), ]
         self._first = self._rotors[0]
         for _ in range(1, size):

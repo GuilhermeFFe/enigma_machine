@@ -15,6 +15,8 @@ class PlugBoard:
         _b = self.pass_through(b)
         if _a != a or _b != b:
             raise Exception('Cant connect plug on char that is already connected')
+        if len(self._plugs) >= 13:
+            raise Exception('Cant have more than 13 plugs')
         self._plugs.append(self.Plug(a, b))
 
     def pass_through(self, c: int) -> str:
