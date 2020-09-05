@@ -1,7 +1,5 @@
 from random import randint
 
-alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-
 end_rotor_wiring = (25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
 rotor_wiring = (
     (15, 4, 25, 20, 14, 7, 23, 18, 2, 21, 5, 12, 19, 1, 6, 11, 17, 8, 13, 16, 9, 22, 0, 24, 3, 10),
@@ -75,14 +73,7 @@ class Rotors:
         for _ in range (by):
             self._first.increment()
     
-    def char_to_number(self, c: str) -> int:
-        return alphabet.index(c)
-    
-    def number_to_char(self, c: int) -> str:
-        return alphabet[c]
-    
-    def pass_through(self, c: str) -> str:
-        c = c.upper()
-        new_c = self._first.pass_through(self.char_to_number(c))
+    def pass_through(self, c: int) -> int:
+        new_c = self._first.pass_through(c)
         self._first.increment()
-        return self.number_to_char(new_c)
+        return new_c
