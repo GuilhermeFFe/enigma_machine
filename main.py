@@ -10,6 +10,11 @@ def type_msg(original):
     machine1 = Machine()
     machine2 = Machine()
 
+    machine1.add_plug('A', 'B')
+    machine1.increment_rotors(150)
+    machine2.add_plug('A', 'B')
+    machine2.increment_rotors(150)
+
     unencrypted = original.split()
     print(original)
 
@@ -25,4 +30,4 @@ def type_msg(original):
     print(encrypted)
     print(decrypted)
 
-type_msg('BATATINHA QUANDO NASCE ESPALHA RAMA PELO CHAO')
+type_msg('BATATA')

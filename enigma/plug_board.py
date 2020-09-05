@@ -5,7 +5,7 @@ class PlugBoard:
                 raise Exception('Plug cant connect to itself')
             self._connection = {a: b, b: a}
         def __getitem__(self, idx: int) -> int:
-            return self._connection.get(c, c)
+            return self._connection.get(idx, idx)
 
     def __init__(self):
         self._plugs = []
@@ -13,7 +13,7 @@ class PlugBoard:
     def add_plug(self, a: int, b: int) -> None:
         _a = self.pass_through(a)
         _b = self.pass_through(b)
-        if _a == b or _a == a or _b == b or _b == _a:
+        if _a != a or _b != b:
             raise Exception('Cant connect plug on char that is already connected')
         self._plugs.append(self.Plug(a, b))
 
